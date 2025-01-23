@@ -52,16 +52,16 @@
                   <h4 class="mt-1 mb-5 pb-1">Welcome to DineSphere</h4>
                 </div>
 
-                <form id="signInForm">
+                <form action="./forms/login.php" method="POST" id="signInForm">
                   <p>Please login to your account</p>
 
                   <div class="form-outline mb-4">
-                    <input type="email" class="form-control" placeholder="Email address" required />
+                    <input type="email" class="form-control" placeholder="Email address" required name="email" />
                     <label class="form-label">Email</label>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <input type="password" class="form-control" placeholder="Password" required />
+                    <input type="password" class="form-control" placeholder="Password" required name="password"/>
                     <label class="form-label">Password</label>
                   </div>
 
@@ -76,21 +76,21 @@
                   </div>
                 </form>
 
-                <form id="signUpForm" style="display: none;">
+                <form id="signUpForm" style="display: none;" action="./forms/Register.php" method="POST">
                   <p>Create your account</p>
 
                   <div class="form-outline mb-4">
-                    <input type="text" class="form-control" placeholder="Full Name" required />
+                    <input type="text" class="form-control" placeholder="Full Name" required name="fullName" />
                     <label class="form-label">Full Name</label>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <input type="email" class="form-control" placeholder="Email address" required />
+                    <input type="email" class="form-control" placeholder="Email address" required name="email"/>
                     <label class="form-label">Email</label>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <input type="password" class="form-control" placeholder="Password" required />
+                    <input type="password" class="form-control" placeholder="Password" required  name="password"/>
                     <label class="form-label">Password</label>
                   </div>
 
@@ -106,7 +106,7 @@
                 <form id="forgotPasswordForm" style="display: none;">
                   <p>Reset your password</p>
                   <div class="form-outline mb-4">
-                    <input type="email" class="form-control" placeholder="Enter your email" required />
+                    <input type="email" class="form-control" placeholder="Enter your email" required name="email"/>
                     <label class="form-label">Email</label>
                   </div>
                   <div class="text-center pt-1 mb-5 pb-1">
