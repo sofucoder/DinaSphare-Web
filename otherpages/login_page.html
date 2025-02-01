@@ -8,7 +8,7 @@
   <link href="assets/img/D-log.jpg" rel="icon">
   <style>
     body {
-      background-image: url('assets/img/last_lo.jpg');
+      background-image: url('../assets/img/last_lo.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -48,11 +48,11 @@
             <div class="col-lg-6 ">
               <div class="card-body p-md-5 mx-md-4">
                 <div class="text-center">
-                  <img src="assets/img/D-log.jpg" style="width: 185px;" alt="DineSphere logo">
+                  <img src="../assets/img/D-log.jpg" style="width: 185px;" alt="DineSphere logo">
                   <h4 class="mt-1 mb-5 pb-1">Welcome to DineSphere</h4>
                 </div>
 
-                <form action="./forms/login.php" method="POST" id="signInForm">
+                <form action="../PHP/login/login.php" method="POST" id="signInForm">
                   <p>Please login to your account</p>
 
                   <div class="form-outline mb-4">
@@ -67,7 +67,6 @@
 
                   <div class="text-center pt-1 mb-5 pb-1">
                     <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Log in</button>
-                    <a class="text-muted" href="#" onclick="toggleForgetPasswordForm()">Forgot password?</a>
                   </div>
 
                   <div class="d-flex align-items-center justify-content-center pb-4">
@@ -76,7 +75,7 @@
                   </div>
                 </form>
 
-                <form id="signUpForm" style="display: none;" action="./forms/Register.php" method="POST">
+                <form id="signUpForm" style="display: none;" action="../PHP/login/sign-up.php" method="POST">
                   <p>Create your account</p>
 
                   <div class="form-outline mb-4">
@@ -103,7 +102,7 @@
                     <button type="button" class="btn btn-outline-danger" onclick="toggleForm()">Login</button>
                   </div>
                 </form>
-                <form id="forgotPasswordForm" style="display: none;">
+                <form id="../PHP/login/login.php" style="display: none;">
                   <p>Reset your password</p>
                   <div class="form-outline mb-4">
                     <input type="email" class="form-control" placeholder="Enter your email" required name="email"/>
@@ -123,7 +122,7 @@
       </div>
     </div>
   </div>
-</section>
+</section>           
 <script>
   function toggleForm() {
     const signInForm = document.getElementById('signInForm');
