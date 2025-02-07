@@ -23,6 +23,7 @@
   <link href="assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="assets/js/php-book-table-form.js"
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
@@ -43,7 +44,7 @@
           <li><a href="#hero" class="active">Home</a></li>
           <li><a href="#about">About Us</a></li>
           <li><a href="#menu">Our Menu</a></li>
-          <li><a href="#specials">Today's Specials</a></li>
+          <li><a href="#specials">Specials</a></li>
           <li><a href="#events">Upcoming Events</a></li>
           <li><a href="#chefs">Our Chefs</a></li>
           <li><a href="#gallery">Gallery</a></li>
@@ -484,69 +485,124 @@
 </section><!-- /Events Section -->
 
 
-    <!-- Book A Table Section -->
+<!-- Book A Table Section -->
 <section id="book-a-table" class="book-a-table section">
+    <div class="container section-title" data-aos="fade-up">
+        <h2>RESERVATION</h2>
+        <p>Book a Table at DineSphere</p>
+    </div>
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <form action="PHP/table/book-a-table.php" method="post" role="form" class="php-email-form">
+            <div class="row gy-4">
+                <div class="col-lg-4 col-md-6">
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Your Full Name" required>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <input type="email" class="form-control" name="email" id="email" placeholder="Your Email Address" required>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <input type="text" class="form-control" name="phone" id="phone" placeholder="Your Phone Number" required>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <input type="date" name="date" class="form-control" id="date" placeholder="Reservation Date" required>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <input type="time" class="form-control" name="time" id="time" placeholder="Reservation Time" required>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <input type="number" class="form-control" name="people" id="people" placeholder="Number of People" required>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <select class="form-control" name="table_number" id="table_number" required>
+                        <!-- Available tables will be loaded here by JavaScript -->
+                    </select>  
+                </div>
+            </div>
+            <div class="form-group mt-3">
+                <textarea class="form-control" name="message" rows="5" placeholder="Special Requests or Message (Optional)"></textarea>
+            </div>
+            <div class="text-center mt-3">
+                <div class="loading">Processing...</div>
+                <div class="error-message"></div>
+                <div class="sent-message">Your booking request has been sent successfully. We will confirm your reservation via phone or email. Thank you for choosing DineSphere!</div>
+                <button type="submit">Book a Table</button>
+            </div>
+        </form>
+    </div>
+</section>
 
-  <!-- Section Title -->
-  <div class="container section-title" data-aos="fade-up">
-    <h2>RESERVATION</h2>
-    <p>Book a Table at DineSphere</p>
-  </div><!-- End Section Title -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("PHP/table/fetch_available_tables.php")  // Ensure correct path
+        .then(response => response.json())
+        .then(data => {
+            let tableDropdown = document.getElementById("table_number");
+            tableDropdown.innerHTML = ""; // Clear previous options
 
-  <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-    <!-- Reservation Form -->
-    <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form">
-      <div class="row gy-4">
+            if (data.length === 0) {
+                tableDropdown.innerHTML = '<option value="">No tables available</option>';
+            } else {
+                data.forEach(table => {
+                    let option = document.createElement("option");
+                    option.value = table;
+                    option.textContent = "Table " + table;
+                    tableDropdown.appendChild(option);
+                });
+            }
+        })
+        .catch(error => console.error("Error fetching tables:", error));
+});
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".php-email-form").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
         
-        <!-- Name Input -->
-        <div class="col-lg-4 col-md-6">
-          <input type="text" name="name" class="form-control" id="name" placeholder="Your Full Name" required="">
-        </div>
-        
-        <!-- Email Input -->
-        <div class="col-lg-4 col-md-6">
-          <input type="email" class="form-control" name="email" id="email" placeholder="Your Email Address" required="">
-        </div>
-        
-        <!-- Phone Input -->
-        <div class="col-lg-4 col-md-6">
-          <input type="text" class="form-control" name="phone" id="phone" placeholder="Your Phone Number" required="">
-        </div>
-        
-        <!-- Date Input -->
-        <div class="col-lg-4 col-md-6">
-          <input type="date" name="date" class="form-control" id="date" placeholder="Reservation Date" required="">
-        </div>
-        
-        <!-- Time Input -->
-        <div class="col-lg-4 col-md-6">
-          <input type="time" class="form-control" name="time" id="time" placeholder="Reservation Time" required="">
-        </div>
-        
-        <!-- Number of People -->
-        <div class="col-lg-4 col-md-6">
-          <input type="number" class="form-control" name="people" id="people" placeholder="Number of People" required="">
-        </div>
-      </div>
+        let formData = new FormData(this);
+        let loadingBox = document.querySelector(".loading");
+        let messageBox = document.querySelector(".sent-message");
+        let errorBox = document.querySelector(".error-message");
 
-      <!-- Message Section -->
-      <div class="form-group mt-3">
-        <textarea class="form-control" name="message" rows="5" placeholder="Special Requests or Message (Optional)"></textarea>
-      </div>
+        // Show loading message
+        loadingBox.style.display = "block";
+        messageBox.style.display = "none";
+        errorBox.style.display = "none";
 
-      <!-- Submit Button and Feedback Messages -->
-      <div class="text-center mt-3">
-        <div class="loading">Processing...</div>
-        <div class="error-message"></div>
-        <div class="sent-message">Your booking request has been sent successfully. We will confirm your reservation via phone or email. Thank you for choosing DineSphere!</div>
-        <button type="submit">Book a Table</button>
-      </div>
-    </form><!-- End Reservation Form -->
+        fetch(this.action, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json()) // Convert response to JSON
+        .then(data => {
+            loadingBox.style.display = "none"; // ✅ Hide "Processing..."
 
-  </div>
+            if (data.status === "success") {
+                errorBox.style.display = "none"; // Hide error
+                errorBox.innerHTML = "";
+                errorBox.classList.remove("error-message");
 
-</section><!-- /Book A Table Section -->
+                messageBox.textContent = data.message;
+                messageBox.style.display = "block";
+                messageBox.style.backgroundColor = "green";
+            } else {
+                messageBox.style.display = "none";
+                errorBox.textContent = data.message;
+                errorBox.style.display = "block";
+                errorBox.style.backgroundColor = "red";
+            }
+        })
+        .catch(error => {
+            loadingBox.style.display = "none"; // ✅ Hide "Processing..." on error
+            errorBox.textContent = "An error occurred. Please try again.";
+            errorBox.style.display = "block";
+            errorBox.style.backgroundColor = "red";
+        });
+    });
+});
+
+
+
+</script>
+
+
 
 
  <section id="testimonials" class="testimonials section">
@@ -883,37 +939,61 @@
 
       </div>
 
-      <div class="col-lg-8">
-        <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
-          <div class="row gy-4">
-
+        <div class="col-lg-8">
+          <form id="feedbackForm" action="PHP/feedback/submit_feedback.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+         <div class="row gy-4">
             <div class="col-md-6">
-              <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+                <input type="text" name="name" class="form-control" placeholder="Your Name" required>
             </div>
-
-            <div class="col-md-6 ">
-              <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
+            <div class="col-md-6">
+                <input type="email" class="form-control" name="email" placeholder="Your Email" required>
             </div>
-
             <div class="col-md-12">
-              <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
+                <input type="text" class="form-control" name="subject" placeholder="Subject" required>
             </div>
-
             <div class="col-md-12">
-              <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
+                <textarea class="form-control" name="message" rows="6" placeholder="Message" required></textarea>
             </div>
-
             <div class="col-md-12 text-center">
-              <div class="loading">Loading</div>
-              <div class="error-message"></div>
-              <div class="sent-message">Your message has been sent. Thank you!</div>
-
-              <button type="submit">Send Message</button>
+                <div id="responseMessage"></div>
+                <button type="submit">Send Message</button>
             </div>
-
           </div>
-        </form>
-      </div><!-- End Contact Form -->
+         </form>
+        </div>
+        <script>
+document.getElementById("feedbackForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Show "Processing..." message
+    document.querySelector(".loading").style.display = "block";
+
+    // Hide any previous response message
+    document.getElementById("responseMessage").innerHTML = '';
+
+    // Create a new FormData object to capture the form data
+    var formData = new FormData(this);
+
+    // Send the form data using Fetch API
+    fetch("PHP/feedback/submit_feedback.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.text()) // Get the response as text
+    .then(data => {
+        // Hide "Processing..." message
+        document.querySelector(".loading").style.display = "none";
+        
+        // Show the response message
+        document.getElementById("responseMessage").innerHTML = data;
+    })
+    .catch(error => {
+        // Handle errors, hide "Processing..." and show error message
+        document.querySelector(".loading").style.display = "none";
+        document.getElementById("responseMessage").innerHTML = "<div class='alert alert-danger'>Error submitting feedback. Please try again.</div>";
+    });
+});
+</script>
 
     </div>
 
@@ -971,15 +1051,63 @@
       <div class="col-lg-4 col-md-12 footer-newsletter">
         <h4>Our Newsletter</h4>
         <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-        <form action="forms/newsletter.php" method="post" class="php-email-form">
-          <div class="newsletter-form">
-            <input type="email" name="email" placeholder="Your Email">
-            <input type="submit" value="Subscribe">
-          </div>
-          <div class="loading">Loading</div>
-          <div class="error-message"></div>
-          <div class="sent-message">Your subscription request has been sent. Thank you!</div>
-        </form>
+   <form id="newsletterForm" action="PHP/feedback/newsletter.php" method="post" class="php-email-form">
+  <div class="newsletter-form">
+    <input type="email" name="email" id="email" placeholder="Your Email" required>
+    <input type="submit" value="Subscribe">
+  </div>
+ 
+  <div class="sent-message" style="display: none;">Your subscription request has been sent. Thank you!</div>
+</form>
+
+<script>
+  // Handle form submission using AJAX
+  document.getElementById("newsletterForm").addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  // Get the email value
+  var email = document.getElementById("email").value;
+
+  // Hide any previous messages
+  document.querySelector(".loading").style.display = "block";
+  document.querySelector(".error-message").style.display = "none";
+  document.querySelector(".sent-message").style.display = "none";
+
+  // Make an AJAX request
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "PHP/feedback/newsletter.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      // Hide the loading indicator
+      document.querySelector(".loading").style.display = "none";
+
+      // Check the response from the server
+      if (xhr.responseText === "success") {
+        // Show success message
+        document.querySelector(".sent-message").style.display = "block";
+        document.getElementById("newsletterForm").reset(); // Reset the form
+      } else {
+        // Show error message
+        document.querySelector(".error-message").style.display = "block";
+        if (xhr.responseText === "invalid_email") {
+          document.querySelector(".error-message").innerHTML = "Invalid email address. Please try again.";
+        } else {
+          document.querySelector(".error-message").innerHTML = "There was an error. Please try again.";
+        }
+      }
+    }
+  };
+
+  // Send the email value to the server
+  xhr.send("email=" + encodeURIComponent(email));
+});
+
+</script>
+
+
+
       </div>
 
     </div>

@@ -43,10 +43,10 @@
           <li><a href="#hero" class="active">Home</a></li>
           <li><a href="#about">About Us</a></li>
           <li><a href="#menu">Our Menu</a></li>
-          <li><a href="#specials">Today's Specials</a></li>
+          <li><a href="#specials">Specials</a></li>
           <li><a href="#events">Upcoming Events</a></li>
+           <li><a href="#gallery">Gallery</a></li>
           <li><a href="#chefs">Our Chefs</a></li>
-          <li><a href="#gallery">Gallery</a></li>
          <li><a href="#testimonials">Customer Reviews</a></li>
           <li><a href="#contact">Contact Us</a></li>
         </ul>
@@ -74,7 +74,7 @@
         <p data-aos="fade-up" data-aos-delay="200">Bringing you delightful dining experiences every day!</p>
         <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
           <a href="#menu" class="cta-btn">Explore Our Menu</a>
-          <a href="#book-a-table" class="cta-btn">Reserve a Table</a>
+          <a href="./otherpages/login_page.html" class="cta-btn">Reserve a Table</a>
         </div>
       </div>       
     </div>
@@ -483,72 +483,6 @@
 
 </section><!-- /Events Section -->
 
-
-    <!-- Book A Table Section -->
-<section id="book-a-table" class="book-a-table section">
-
-  <!-- Section Title -->
-  <div class="container section-title" data-aos="fade-up">
-    <h2>RESERVATION</h2>
-    <p>Book a Table at DineSphere</p>
-  </div><!-- End Section Title -->
-
-  <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-    <!-- Reservation Form -->
-    <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form">
-      <div class="row gy-4">
-        
-        <!-- Name Input -->
-        <div class="col-lg-4 col-md-6">
-          <input type="text" name="name" class="form-control" id="name" placeholder="Your Full Name" required="">
-        </div>
-        
-        <!-- Email Input -->
-        <div class="col-lg-4 col-md-6">
-          <input type="email" class="form-control" name="email" id="email" placeholder="Your Email Address" required="">
-        </div>
-        
-        <!-- Phone Input -->
-        <div class="col-lg-4 col-md-6">
-          <input type="text" class="form-control" name="phone" id="phone" placeholder="Your Phone Number" required="">
-        </div>
-        
-        <!-- Date Input -->
-        <div class="col-lg-4 col-md-6">
-          <input type="date" name="date" class="form-control" id="date" placeholder="Reservation Date" required="">
-        </div>
-        
-        <!-- Time Input -->
-        <div class="col-lg-4 col-md-6">
-          <input type="time" class="form-control" name="time" id="time" placeholder="Reservation Time" required="">
-        </div>
-        
-        <!-- Number of People -->
-        <div class="col-lg-4 col-md-6">
-          <input type="number" class="form-control" name="people" id="people" placeholder="Number of People" required="">
-        </div>
-      </div>
-
-      <!-- Message Section -->
-      <div class="form-group mt-3">
-        <textarea class="form-control" name="message" rows="5" placeholder="Special Requests or Message (Optional)"></textarea>
-      </div>
-
-      <!-- Submit Button and Feedback Messages -->
-      <div class="text-center mt-3">
-        <div class="loading">Processing...</div>
-        <div class="error-message"></div>
-        <div class="sent-message">Your booking request has been sent successfully. We will confirm your reservation via phone or email. Thank you for choosing DineSphere!</div>
-        <button type="submit">Book a Table</button>
-      </div>
-    </form><!-- End Reservation Form -->
-
-  </div>
-
-</section><!-- /Book A Table Section -->
-
-
  <section id="testimonials" class="testimonials section">
 
   <!-- Section Title -->
@@ -883,38 +817,6 @@
 
       </div>
 
-      <div class="col-lg-8">
-        <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
-          <div class="row gy-4">
-
-            <div class="col-md-6">
-              <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
-            </div>
-
-            <div class="col-md-6 ">
-              <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
-            </div>
-
-            <div class="col-md-12">
-              <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
-            </div>
-
-            <div class="col-md-12">
-              <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
-            </div>
-
-            <div class="col-md-12 text-center">
-              <div class="loading">Loading</div>
-              <div class="error-message"></div>
-              <div class="sent-message">Your message has been sent. Thank you!</div>
-
-              <button type="submit">Send Message</button>
-            </div>
-
-          </div>
-        </form>
-      </div><!-- End Contact Form -->
-
     </div>
 
   </div>
@@ -971,15 +873,60 @@
       <div class="col-lg-4 col-md-12 footer-newsletter">
         <h4>Our Newsletter</h4>
         <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-        <form action="forms/newsletter.php" method="post" class="php-email-form">
-          <div class="newsletter-form">
-            <input type="email" name="email" placeholder="Your Email">
-            <input type="submit" value="Subscribe">
-          </div>
-          <div class="loading">Loading</div>
-          <div class="error-message"></div>
-          <div class="sent-message">Your subscription request has been sent. Thank you!</div>
-        </form>
+         <form id="newsletterForm" action="PHP/feedback/newsletter.php" method="post" class="php-email-form">
+  <div class="newsletter-form">
+    <input type="email" name="email" id="email" placeholder="Your Email" required>
+    <input type="submit" value="Subscribe">
+  </div>
+ 
+  <div class="sent-message" style="display: none;">Your subscription request has been sent. Thank you!</div>
+</form>
+
+<script>
+  // Handle form submission using AJAX
+  document.getElementById("newsletterForm").addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  // Get the email value
+  var email = document.getElementById("email").value;
+
+  // Hide any previous messages
+  document.querySelector(".loading").style.display = "block";
+  document.querySelector(".error-message").style.display = "none";
+  document.querySelector(".sent-message").style.display = "none";
+
+  // Make an AJAX request
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "PHP/feedback/newsletter.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      // Hide the loading indicator
+      document.querySelector(".loading").style.display = "none";
+
+      // Check the response from the server
+      if (xhr.responseText === "success") {
+        // Show success message
+        document.querySelector(".sent-message").style.display = "block";
+        document.getElementById("newsletterForm").reset(); // Reset the form
+      } else {
+        // Show error message
+        document.querySelector(".error-message").style.display = "block";
+        if (xhr.responseText === "invalid_email") {
+          document.querySelector(".error-message").innerHTML = "Invalid email address. Please try again.";
+        } else {
+          document.querySelector(".error-message").innerHTML = "There was an error. Please try again.";
+        }
+      }
+    }
+  };
+
+  // Send the email value to the server
+  xhr.send("email=" + encodeURIComponent(email));
+});
+
+</script>
       </div>
 
     </div>
