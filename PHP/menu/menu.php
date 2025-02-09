@@ -100,38 +100,23 @@ $result = $conn->query($query);
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="#hero" class="active">Home</a></li>
-          <li><a href="#about">About Us</a></li>
-          <li><a href="#menu">Our Menu</a></li>
-          <li><a href="#specials">Today's Specials</a></li>
-          <li><a href="#events">Upcoming Events</a></li>
-          <li><a href="#chefs">Our Chefs</a></li>
-          <li><a href="#gallery">Gallery</a></li>
-          <li class="dropdown">
-            <a href="#"><span>More</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+          <li><a href="../../dashboard.php #hero" class="active">Home</a></li>
+          <li><a href=" ../../dashboard.php #specials">Specials</a></li>
+          <li><a href="../../dashboard.php  #events">Upcoming Events</a></li>
+          <li><a href="../../dashboard.php #chefs">Our Chefs</a></li>
+          <li><a href="../../dashboard.php #gallery">Gallery</a></li>
             <ul>
-              <li><a href="#">Customer Reviews</a></li>
-              <li class="dropdown">
-                <a href="#"><span>Services</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Online Ordering</a></li>
-                  <li><a href="#">Table Reservation</a></li>
-                  <li><a href="#">Catering Services</a></li>
-                  <li><a href="#">Private Events</a></li>
-                  <li><a href="#">Gift Cards</a></li>
+              <li><a href="../../dashboard.php #testimonials">Customer Reviews</a></li>
+                <ul>  
                 </ul>
-              </li>
-              <li><a href="#">FAQs</a></li>
-              <li><a href="#">Careers</a></li>
-              <li><a href="#">Blog</a></li>
             </ul>
           </li>
-          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="../../dashboard.php #contact">Contact Us</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-book-a-table d-none d-xl-block" href="#book-a-table">Book a Table</a>
+      <a class="btn-book-a-table d-none d-xl-block" href="../../dashboard.php #book-a-table">Book a Table</a>
     </div>
   </div>
 </header>
@@ -139,7 +124,7 @@ $result = $conn->query($query);
 
 <main>
         <div class="container_card container">
-            <h2 class="text-center mb-4">Our Food Menu</h2>
+            <h2 class="text-center mb-4 text-dark">Our Food Menu</h2>
             <div class="row">
                 <?php while ($row = $result->fetch_assoc()) { ?>
                     <div class="col-md-4 mb-4">
@@ -147,7 +132,7 @@ $result = $conn->query($query);
                             <form method="POST" action="add_to_cart.php">
                                 <img src="<?php echo htmlspecialchars($row['image']); ?>" alt="Food Image">
                                 <div class="menu-title text"><?php echo htmlspecialchars($row['name']); ?></div>
-                                <div class="menu-price text">$<?php echo number_format($row['price'], 2); ?></div>
+                                <div class="menu-price text"><?php echo number_format($row['price'], 2); ?> Birr</div>
                                 <p class="text"><?php echo htmlspecialchars($row['description']); ?></p>
                                 
                                 <!-- Hidden input fields to pass food details -->
@@ -164,7 +149,7 @@ $result = $conn->query($query);
         </div>
     </main>
 
- <footer id="footer" class="footer">
+<footer id="footer" class="footer">
 
   <div class="container footer-top">
     <div class="row gy-4">
@@ -211,15 +196,63 @@ $result = $conn->query($query);
       <div class="col-lg-4 col-md-12 footer-newsletter">
         <h4>Our Newsletter</h4>
         <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-        <form action="forms/newsletter.php" method="post" class="php-email-form">
-          <div class="newsletter-form">
-            <input type="email" name="email" placeholder="Your Email">
-            <input type="submit" value="Subscribe">
-          </div>
-          <div class="loading">Loading</div>
-          <div class="error-message"></div>
-          <div class="sent-message">Your subscription request has been sent. Thank you!</div>
-        </form>
+   <form id="newsletterForm" action="PHP/feedback/newsletter.php" method="post" class="php-email-form">
+  <div class="newsletter-form">
+    <input type="email" name="email" id="email" placeholder="Your Email" required>
+    <input type="submit" value="Subscribe">
+  </div>
+ 
+  <div class="sent-message" style="display: none;">Your subscription request has been sent. Thank you!</div>
+</form>
+
+<script>
+  // Handle form submission using AJAX
+  document.getElementById("newsletterForm").addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  // Get the email value
+  var email = document.getElementById("email").value;
+
+  // Hide any previous messages
+  document.querySelector(".loading").style.display = "block";
+  document.querySelector(".error-message").style.display = "none";
+  document.querySelector(".sent-message").style.display = "none";
+
+  // Make an AJAX request
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "PHP/feedback/newsletter.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      // Hide the loading indicator
+      document.querySelector(".loading").style.display = "none";
+
+      // Check the response from the server
+      if (xhr.responseText === "success") {
+        // Show success message
+        document.querySelector(".sent-message").style.display = "block";
+        document.getElementById("newsletterForm").reset(); // Reset the form
+      } else {
+        // Show error message
+        document.querySelector(".error-message").style.display = "block";
+        if (xhr.responseText === "invalid_email") {
+          document.querySelector(".error-message").innerHTML = "Invalid email address. Please try again.";
+        } else {
+          document.querySelector(".error-message").innerHTML = "There was an error. Please try again.";
+        }
+      }
+    }
+  };
+
+  // Send the email value to the server
+  xhr.send("email=" + encodeURIComponent(email));
+});
+
+</script>
+
+
+
       </div>
 
     </div>

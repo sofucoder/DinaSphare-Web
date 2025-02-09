@@ -11,7 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $paymentMethod = $_POST['payment_method'];
     
     // Calculate total price from the cart
-    $totalPrice = array_sum(array_column($_SESSION['cart'], 'price'));
+    $totalPrice = array_sum(array_map(function($item) {
+        return $item['price'] * $item['quantity'];
+    }, $_SESSION['cart']));
 
     // Insert order details into the 'orders' table
     $sql = "INSERT INTO orders (name, phone, address, payment_method, total_price) 
@@ -26,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $foodName = $item['name'];
             $quantity = $item['quantity'];
             $price = $item['price'];
-            $total = $item['quantity'] * $item['price'];
+            $total = $quantity * $price;
 
             $sqlItem = "INSERT INTO order_items (order_id, food_name, quantity, price, total) 
                         VALUES ('$orderId', '$foodName', '$quantity', '$price', '$total')";
@@ -36,10 +38,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Clear the cart after saving the order
         unset($_SESSION['cart']);
 
-        echo '<p>Thank you for your order, ' . $name . '!</p>';
-        echo '<p>Your order has been successfully placed. An admin will review your order.</p>';
+        // Show alert and redirect back to the homepage or cart page
+        echo "<script>
+                alert('Thank you for your order, $name! Your order has been successfully placed. An admin will review your order.');
+                window.location.href = 'cart.php'; // Redirect to cart or home page
+              </script>";
     } else {
-        echo '<p>Error: Unable to process your order. Please try again later.</p>';
+        echo "<script>
+                alert('Error: Unable to process your order. Please try again later.');
+                window.location.href = 'cart.php'; // Redirect to cart
+              </script>";
     }
 }
 ?>
+
