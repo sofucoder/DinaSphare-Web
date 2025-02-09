@@ -266,63 +266,6 @@ if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
       <div class="col-lg-4 col-md-12 footer-newsletter">
         <h4>Our Newsletter</h4>
         <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-   <form id="newsletterForm" action="PHP/feedback/newsletter.php" method="post" class="php-email-form">
-  <div class="newsletter-form">
-    <input type="email" name="email" id="email" placeholder="Your Email" required>
-    <input type="submit" value="Subscribe">
-  </div>
- 
-  <div class="sent-message" style="display: none;">Your subscription request has been sent. Thank you!</div>
-</form>
-
-<script>
-  // Handle form submission using AJAX
-  document.getElementById("newsletterForm").addEventListener("submit", function (event) {
-  event.preventDefault();
-
-  // Get the email value
-  var email = document.getElementById("email").value;
-
-  // Hide any previous messages
-  document.querySelector(".loading").style.display = "block";
-  document.querySelector(".error-message").style.display = "none";
-  document.querySelector(".sent-message").style.display = "none";
-
-  // Make an AJAX request
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "PHP/feedback/newsletter.php", true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      // Hide the loading indicator
-      document.querySelector(".loading").style.display = "none";
-
-      // Check the response from the server
-      if (xhr.responseText === "success") {
-        // Show success message
-        document.querySelector(".sent-message").style.display = "block";
-        document.getElementById("newsletterForm").reset(); // Reset the form
-      } else {
-        // Show error message
-        document.querySelector(".error-message").style.display = "block";
-        if (xhr.responseText === "invalid_email") {
-          document.querySelector(".error-message").innerHTML = "Invalid email address. Please try again.";
-        } else {
-          document.querySelector(".error-message").innerHTML = "There was an error. Please try again.";
-        }
-      }
-    }
-  };
-
-  // Send the email value to the server
-  xhr.send("email=" + encodeURIComponent(email));
-});
-
-</script>
-
-
-
       </div>
 
     </div>
