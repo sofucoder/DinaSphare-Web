@@ -492,7 +492,7 @@
         <p>Book a Table at DineSphere</p>
     </div>
     <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <form action="PHP/table/book-a-table.php" method="post" role="form" class="php-email-form">
+        <form action="PHP/table/book-a-table.php" method="post" role="form" class="php-email-form" id="reservationForm">
             <div class="row gy-4">
                 <div class="col-lg-4 col-md-6">
                     <input type="text" name="name" class="form-control" id="name" placeholder="Your Full Name" required>
@@ -572,7 +572,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(response => response.json()) // Convert response to JSON
         .then(data => {
-            loadingBox.style.display = "none"; // ✅ Hide "Processing..."
+            loadingBox.style.display = "none"; // 
 
             if (data.status === "success") {
                 errorBox.style.display = "none"; // Hide error
@@ -596,6 +596,32 @@ document.addEventListener("DOMContentLoaded", function () {
             errorBox.style.backgroundColor = "red";
         });
     });
+});
+
+document.getElementById("reservationForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent page refresh
+
+    // Collect form data
+    let formData = new FormData(this);
+
+    // Send data via Fetch API (AJAX)
+    fetch("reservation_process.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json()) 
+    .then(data => {
+        if (data.status === "success") {
+            document.getElementById("responseMessage").innerText = data.message;
+            document.getElementById("responseMessage").style.display = "block";
+
+            // Clear input fields
+            document.getElementById("reservationForm").reset();
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(error => console.error("Error:", error));
 });
 
 
@@ -651,8 +677,8 @@ document.addEventListener("DOMContentLoaded", function () {
               <span>"The food was amazing, and the service was even better! DineSphere made our family gathering unforgettable. Highly recommend!"</span>
               <i class="bi bi-quote quote-icon-right"></i>
             </p>
-            <img src="assets/img/testimonials/photo_5775934567725779201_y.jpg" class="testimonial-img" alt="Customer 1">
-            <h3>Sofonyas Mebratu</h3>
+            <img src="assets/img/testimonials/Leonardo_Phoenix_09_A_modern_Ethiopian_man_in_his_midtwenties_2.jpg" class="testimonial-img" alt="Customer 1">
+            <h3>Sofonyas</h3>
             <h4>Happy Customer</h4>
           </div>
         </div><!-- End testimonial item -->
@@ -665,8 +691,8 @@ document.addEventListener("DOMContentLoaded", function () {
               <span>"A fantastic dining experience! The ambiance and food quality were top-notch. Definitely will return soon!"</span>
               <i class="bi bi-quote quote-icon-right"></i>
             </p>
-            <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="Customer 2">
-            <h3>Sara Wilsson</h3>
+             <img src="assets/img/testimonials/Leonardo_Phoenix_09_A_modern_Ethiopian_man_in_his_midtwenties_3.jpg" class="testimonial-img" alt="Customer 2">
+            <h3>Abrham</h3>
             <h4>Designer</h4>
           </div>
         </div><!-- End testimonial item -->
@@ -679,8 +705,8 @@ document.addEventListener("DOMContentLoaded", function () {
               <span>"I had a wonderful time at DineSphere. The menu selection is fantastic, and the staff were incredibly accommodating!"</span>
               <i class="bi bi-quote quote-icon-right"></i>
             </p>
-            <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="Customer 3">
-            <h3>Jena Karlis</h3>
+            <img src="assets/img/testimonials/Leonardo_Phoenix_09_A_modern_Ethiopian_man_in_his_midtwenties_2.jpg" class="testimonial-img" alt="Customer 3">
+            <h3>Kalid</h3>
             <h4>Store Owner</h4>
           </div>
         </div><!-- End testimonial item -->
@@ -693,8 +719,8 @@ document.addEventListener("DOMContentLoaded", function () {
               <span>"The best dining experience I've ever had. Everything from the food to the service was exceptional."</span>
               <i class="bi bi-quote quote-icon-right"></i>
             </p>
-            <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="Customer 4">
-            <h3>Matt Brandon</h3>
+            <img src="assets/img/testimonials/Leonardo_Phoenix_09_A_modern_Ethiopian_man_in_his_midtwenties_1.jpg" class="testimonial-img" alt="Customer 4">
+            <h3>Solomon</h3>
             <h4>Freelancer</h4>
           </div>
         </div><!-- End testimonial item -->
@@ -707,8 +733,8 @@ document.addEventListener("DOMContentLoaded", function () {
               <span>"An unforgettable experience at DineSphere. The food was out of this world, and the atmosphere was perfect for our event."</span>
               <i class="bi bi-quote quote-icon-right"></i>
             </p>
-            <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="Customer 5">
-            <h3>John Larson</h3>
+             <img src="assets/img/testimonials/Leonardo_Phoenix_09_A_modern_Ethiopian_man_in_his_midtwenties_0.jpg" class="testimonial-img" alt="Customer 5">
+            <h3>Feyisa</h3>
             <h4>Entrepreneur</h4>
           </div>
         </div><!-- End testimonial item -->
@@ -722,7 +748,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </section><!-- /Testimonials Section -->
 
 
-  <section id="gallery" class="gallery section">
+ <section id="gallery" class="gallery section">
 
   <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
@@ -812,7 +838,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </section><!-- /Gallery Section -->
 
 
-   <section id="chefs" class="chefs section">
+ <section id="chefs" class="chefs section">
 
   <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
@@ -827,7 +853,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <!-- Chef 1 -->
       <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
         <div class="member">
-          <img src="assets/img/chefs/chefs-1.jpg" class="img-fluid" alt="Walter White">
+         <img src="assets/img/chefs/Leonardo_Phoenix_09_A_regal_Ethiopian_chef_standing_proudly_in_0.jpg" class="img-fluid" alt="Walter White">
           <div class="member-info">
             <div class="member-info-content">
               <h4>Walter White</h4>
@@ -846,7 +872,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <!-- Chef 2 -->
       <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
         <div class="member">
-          <img src="assets/img/chefs/chefs-2.jpg" class="img-fluid" alt="Sarah Johnson">
+          <img src="assets/img/chefs/Leonardo_Phoenix_09_A_regal_Ethiopian_chef_standing_proudly_in_2.jpg" class="img-fluid" alt="Sarah Johnson">
           <div class="member-info">
             <div class="member-info-content">
               <h4>Sarah Johnson</h4>
@@ -865,7 +891,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <!-- Chef 3 -->
       <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
         <div class="member">
-          <img src="assets/img/chefs/chefs-3.jpg" class="img-fluid" alt="William Anderson">
+          <img src="assets/img/chefs/Leonardo_Phoenix_09_A_regal_Ethiopian_chef_standing_proudly_in_3.jpg" class="img-fluid" alt="William Anderson">
           <div class="member-info">
             <div class="member-info-content">
               <h4>William Anderson</h4>
@@ -961,12 +987,12 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
          </form>
         </div>
-        <script>
-document.getElementById("feedbackForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent the default form submission
+  <script>
+     document.getElementById("feedbackForm").addEventListener("submit", function(event) {
+     event.preventDefault(); // Prevent the default form submission
 
     // Show "Processing..." message
-    document.querySelector(".loading").style.display = "block";
+     document.querySelector(".loading").style.display = "block";
 
     // Hide any previous response message
     document.getElementById("responseMessage").innerHTML = '';
@@ -991,9 +1017,9 @@ document.getElementById("feedbackForm").addEventListener("submit", function(even
         // Handle errors, hide "Processing..." and show error message
         document.querySelector(".loading").style.display = "none";
         document.getElementById("responseMessage").innerHTML = "<div class='alert alert-danger'>Error submitting feedback. Please try again.</div>";
+      });
     });
-});
-</script>
+  </script>
 
     </div>
 
@@ -1051,63 +1077,6 @@ document.getElementById("feedbackForm").addEventListener("submit", function(even
       <div class="col-lg-4 col-md-12 footer-newsletter">
         <h4>Our Newsletter</h4>
         <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-   <form id="newsletterForm" action="PHP/feedback/newsletter.php" method="post" class="php-email-form">
-  <div class="newsletter-form">
-    <input type="email" name="email" id="email" placeholder="Your Email" required>
-    <input type="submit" value="Subscribe">
-  </div>
- 
-  <div class="sent-message" style="display: none;">Your subscription request has been sent. Thank you!</div>
-</form>
-
-<script>
-  // Handle form submission using AJAX
-  document.getElementById("newsletterForm").addEventListener("submit", function (event) {
-  event.preventDefault();
-
-  // Get the email value
-  var email = document.getElementById("email").value;
-
-  // Hide any previous messages
-  document.querySelector(".loading").style.display = "block";
-  document.querySelector(".error-message").style.display = "none";
-  document.querySelector(".sent-message").style.display = "none";
-
-  // Make an AJAX request
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "PHP/feedback/newsletter.php", true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      // Hide the loading indicator
-      document.querySelector(".loading").style.display = "none";
-
-      // Check the response from the server
-      if (xhr.responseText === "success") {
-        // Show success message
-        document.querySelector(".sent-message").style.display = "block";
-        document.getElementById("newsletterForm").reset(); // Reset the form
-      } else {
-        // Show error message
-        document.querySelector(".error-message").style.display = "block";
-        if (xhr.responseText === "invalid_email") {
-          document.querySelector(".error-message").innerHTML = "Invalid email address. Please try again.";
-        } else {
-          document.querySelector(".error-message").innerHTML = "There was an error. Please try again.";
-        }
-      }
-    }
-  };
-
-  // Send the email value to the server
-  xhr.send("email=" + encodeURIComponent(email));
-});
-
-</script>
-
-
-
       </div>
 
     </div>

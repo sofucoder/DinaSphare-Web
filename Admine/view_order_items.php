@@ -14,6 +14,18 @@ if ($orderId > 0) {
         $orderQuery = "SELECT * FROM orders WHERE id = $orderId";
         $orderResult = mysqli_query($conn, $orderQuery);
         $order = mysqli_fetch_assoc($orderResult);
+
+        // Check if the admin clicked the "Seen" button and update the status
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mark_seen'])) {
+            $updateStatusQuery = "UPDATE orders SET status = 'seen', seen_date = NOW() WHERE id = $orderId";
+            if (mysqli_query($conn, $updateStatusQuery)) {
+                // Reload the page after updating
+                header("Location: " . $_SERVER['REQUEST_URI']);
+                exit;
+            } else {
+                echo '<p class="text-danger">Failed to update status. Please try again.</p>';
+            }
+        }
     } else {
         echo '<p>No items found for this order.</p>';
         exit;
@@ -41,9 +53,19 @@ if ($orderId > 0) {
         <p><strong>Phone:</strong> <?php echo $order['phone']; ?></p>
         <p><strong>Address:</strong> <?php echo $order['address']; ?></p>
         <p><strong>Payment Method:</strong> <?php echo $order['payment_method']; ?></p>
-        <p><strong>Total Price:</strong> $<?php echo number_format($order['total_price'], 2); ?></p>
+        <p><strong>Total Price:</strong> <?php echo number_format($order['total_price'], 2) . ' Birr'; ?></p>
         
-        <div class="table-responsive">
+        <!-- Show status and date if seen -->
+        <p><strong>Status:</strong> <?php echo $order['status'] == 'seen' ? 'Seen on ' . $order['seen_date'] : 'Not Seen'; ?></p>
+
+        <!-- "Seen" button if the order is not already seen -->
+        <?php if ($order['status'] !== 'seen'): ?>
+            <form method="POST">
+                <button type="submit" name="mark_seen" class="btn btn-success">Mark as Seen</button>
+            </form>
+        <?php endif; ?>
+
+        <div class="table-responsive mt-3">
             <table class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
@@ -59,8 +81,8 @@ if ($orderId > 0) {
                         echo '<tr>';
                         echo '<td>' . $row['food_name'] . '</td>';
                         echo '<td>' . $row['quantity'] . '</td>';
-                        echo '<td>$' . number_format($row['price'], 2) . '</td>';
-                        echo '<td>$' . number_format($row['total'], 2) . '</td>';
+                        echo '<td>' . number_format($row['price'], 2) . ' Birr</td>';
+                        echo '<td>' . number_format($row['total'], 2) . ' Birr</td>';
                         echo '</tr>';
                     }
                     ?>

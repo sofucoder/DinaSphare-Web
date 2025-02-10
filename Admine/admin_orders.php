@@ -2,10 +2,9 @@
 // Include database connection
 include('../PHP/config-db.php');
 
-// Fetch all orders
+// Fetch all orders with status and seen_date
 $sql = "SELECT * FROM orders ORDER BY order_date DESC";
 $result = mysqli_query($conn, $sql);
-
 ?>
 
 <!DOCTYPE html>
@@ -31,6 +30,7 @@ $result = mysqli_query($conn, $sql);
                         <th>Payment Method</th>
                         <th>Total</th>
                         <th>Date</th>
+                        <th>Status</th> <!-- Added Status column -->
                         <th>View Items</th>
                     </tr>
                 </thead>
@@ -39,19 +39,25 @@ $result = mysqli_query($conn, $sql);
                     // Check if any orders exist
                     if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) {
+                            // Check if the order has been seen by the admin
+                            $status = $row['status'] == 'seen' ? 'Seen' : 'Not Seen';
+                            $seenDate = $row['status'] == 'seen' ? 'on ' . $row['seen_date'] : ''; // Display date if seen
+                            
                             echo '<tr>';
                             echo '<td>' . $row['id'] . '</td>';
                             echo '<td>' . $row['name'] . '</td>';
                             echo '<td>' . $row['phone'] . '</td>';
                             echo '<td>' . $row['address'] . '</td>';
                             echo '<td>' . $row['payment_method'] . '</td>';
-                            echo '<td>$' . number_format($row['total_price'], 2) . '</td>';
+                            echo '<td>' . number_format($row['total_price'], 2) . ' Birr</td>';
                             echo '<td>' . $row['order_date'] . '</td>';
+                            echo '<td>' . $status . ' ' . $seenDate . '</td>'; // Display status and seen date
                             echo '<td><a href="view_order_items.php?order_id=' . $row['id'] . '" class="btn btn-info btn-sm">View Items</a></td>';
                             echo '</tr>';
                         }
                     } else {
-                        echo '<tr><td colspan="8" class="text-center">No orders found</td></tr>';
+                        // Moved the "Order not found" message to the bottom
+                        echo '<tr><td colspan="9" class="text-center text-danger">No orders found</td></tr>';
                     }
                     ?>
                 </tbody>
